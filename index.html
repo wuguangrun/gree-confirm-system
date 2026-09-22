@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>格力市场稽查 - 确认函管理系统</title>
+<style>
+:root {
+    --primary: #00529b; --primary-light: #e8f0f8; --primary-dark: #003a6b;
+    --accent: #e60012; --accent-light: #fde8ea;
+    --success: #10b981; --success-light: #e6f7f1;
+    --warning: #f59e0b; --warning-light: #fef3e2;
+    --purple: #7c3aed; --purple-light: #f3e8ff;
+    --pink: #e6007e; --pink-light: #fce7f3;
+    --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
+    --gray-300: #d1d5db; --gray-400: #9ca3af; --gray-500: #6b7280;
+    --gray-600: #4b5563; --gray-700: #374151; --gray-800: #1f2937; --gray-900: #111827;
+    --border: #e5e7eb; --radius: 8px; --radius-lg: 12px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.12);
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font); background: #f0f2f5; color: var(--gray-800); font-size: 14px; line-height: 1.6; min-height: 100vh; }
+/* ========== 顶部导航 ========== */
+.top-nav {
+    background: #fff; border-bottom: 1px solid var(--border); padding: 0 24px; height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm);
+}
+.logo-area { display: flex; align-items: center; gap: 10px; }
+.logo-icon { width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 16px; transition: background 0.3s; }
+.logo-icon.hq { background: var(--primary); }
+.logo-icon.branch { background: var(--pink); }
+.logo-text { font-weight: 700; font-size: 16px; color: var(--primary); letter-spacing: 0.5px; }
+.logo-sub { font-size: 12px; color: var(--gray-500); margin-left: 4px; }
+.role-switcher { display: flex; gap: 6px; background: var(--gray-100); padding: 4px; border-radius: 8px; }
+.role-btn {
+    padding: 6px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;
+    border: none; background: transparent; color: var(--gray-600); transition: all 0.2s; font-family: var(--font);
+}
+.role-btn.active { background: #fff; color: var(--primary); box-shadow: var(--shadow-sm); }
+.role-btn.active.branch { color: var(--pink); }
+.user-info { display: flex; align-items: center; gap: 10px; }
+.user-avatar { width: 32px; height: 32px; border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+.user-avatar.hq { background: var(--primary); }
+.user-avatar.branch { background: var(--pink); }
+.user-name { font-size: 13px; font-weight: 500; color: var(--gray-700); }
+.user-role { font-size: 11px; color: var(--gray-500); background: var(--gray-100); padding: 2px 8px; border-radius: 10px; }
+/* ========== 主内容 ========== */
+.main-content { max-width: 1600px; margin: 0 auto; padding: 20px 24px; }
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+.page-title { font-size: 20px; font-weight: 700; color: var(--gray-900); letter-spacing: 0.3px; }
+.page-desc { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
+.header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+/* ========== 按钮 ========== */
+.btn {
+    display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 6px;
+    font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid transparent;
+    transition: all 0.2s; white-space: nowrap; font-family: var(--font); line-height: 1.4;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-outline { background: #fff; color: var(--gray-700); border-color: var(--gray-300); }
+.btn-outline:hover { background: var(--gray-50); border-color: var(--gray-400); }
+.btn-success { background: var(--success); color: #fff; border-color: var(--success); }
+.btn-success:hover { background: #059669; }
+.btn-danger { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-danger:hover { background: #c40010; }
+.btn-warning { background: var(--warning); color: #fff; border-color: var(--warning); }
+.btn-warning:hover { background: #d97706; }
+.btn-purple { background: var(--purple); color: #fff; border-color: var(--purple); }
+.btn-purple:hover { background: #6d28d9; }
+.btn-pink { background: var(--pink); color: #fff; border-color: var(--pink); }
+.btn-pink:hover { background: #be185d; }
+.btn-sm { padding: 5px 12px; font-size: 12px; border-radius: 5px; }
+.btn-xs { padding: 3px 10px; font-size: 11px; border-radius: 4px; }
+/* ========== 统计卡片 ========== */
+.stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.stat-card { background: #fff; border-radius: 8px; border: 1px solid var(--border); padding: 14px 16px; display: flex; align-items: center; gap: 12px; transition: all 0.2s; }
+.stat-card:hover { border-color: var(--primary); box-shadow: var(--shadow-sm); }
+.stat-icon { width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+.stat-icon.blue { background: var(--primary-light); color: var(--primary); }
+.stat-icon.green { background: var(--success-light); color: var(--success); }
+.stat-icon.red { background: var(--accent-light); color: var(--accent); }
+.stat-icon.yellow { background: var(--warning-light); color: var(--warning); }
+.stat-icon.purple { background: var(--purple-light); color: var(--purple); }
+.stat-icon.pink { background: var(--pink-light); color: var(--pink); }
+.stat-value { font-size: 20px; font-weight: 700; color: var(--gray-900); line-height: 1.2; }
+.stat-label { font-size: 12px; color: var(--gray-500); }
+/* ========== 卡片 ========== */
+.card { background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; margin-bottom: 20px; }
+.card-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; background: #fafbfc; }
+.card-title { font-weight: 600; font-size: 15px; color: var(--gray-900); }
+.card-body { padding: 16px 20px; }
+/* ========== 筛选 ========== */
+.filter-bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin-bottom: 16px; }
+.filter-item { display: flex; flex-direction: column; gap: 4px; min-width: 150px; }
+.filter-item label { font-size: 12px; font-weight: 600; color: var(--gray-600); }
+.filter-item input, .filter-item select {
+    padding: 7px 10px; border: 1px solid var(--gray-300); border-radius: 6px;
+    font-size: 13px; font-family: var(--font); background: #fff; color: var(--gray-800);
+}
+.filter-item input:focus, .filter-item select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,82,155,0.1); }
+.filter-actions { display: flex; gap: 8px; align-items: center; }
+/* ========== 表格 ========== */
+.table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead { background: #f8fafc; border-bottom: 2px solid var(--border); }
+thead th { padding: 10px 14px; text-align: left; font-weight: 600; font-size: 12px; color: var(--gray-700); white-space: nowrap; border-right: 1px solid var(--gray-200); }
+thead th:last-child { border-right: none; }
+tbody td { padding: 10px 14px; border-bottom: 1px solid var(--gray-100); color: var(--gray-700); white-space: nowrap; vertical-align: middle; }
+tbody tr:hover { background: #f9fafb; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr.row-supplement { background: #faf5ff; }
+tbody tr.row-appeal { background: #fff7ed; }
+tbody tr.row-void { opacity: 0.65; }
+/* ========== 徽章 ========== */
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.badge-success { background: var(--success-light); color: #047857; }
+.badge-danger { background: var(--accent-light); color: #b91c1c; }
+.badge-warning { background: var(--warning-light); color: #b45309; }
+.badge-info { background: var(--primary-light); color: var(--primary); }
+.badge-gray { background: var(--gray-100); color: var(--gray-600); }
+.badge-purple { background: var(--purple-light); color: var(--purple); }
+.badge-pink { background: var(--pink-light); color: var(--pink); }
+/* ========== 操作链接 ========== */
+.action-link { color: var(--primary); cursor: pointer; font-size: 12px; white-space: nowrap; text-decoration: none; padding: 2px 4px; border-radius: 3px; }
+.action-link:hover { text-decoration: underline; color: var(--primary-dark); }
+.action-link.danger { color: var(--accent); }
+.action-link.success { color: var(--success); }
+.action-link.purple { color: var(--purple); }
+.action-sep { color: var(--gray-300); margin: 0 4px; }
+/* ========== 空状态 ========== */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--gray-400); }
+.empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state .empty-text { font-size: 14px; }
+/* ========== 弹窗 ========== */
+.modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+    z-index: 200; align-items: center; justify-content: center; animation: fadeIn 0.15s ease;
+}
+.modal-overlay.active { display: flex; }
+.modal {
+    background: #fff; border-radius: var(--radius-lg); width: 90%; max-width: 720px;
+    max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); animation: slideUp 0.2s ease;
+}
+.modal.wide { max-width: 850px; }
+.modal.narrow { max-width: 520px; }
+.modal-header { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: #fff; z-index: 1; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+.modal-title { font-weight: 700; font-size: 16px; color: var(--gray-900); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.modal-close { cursor: pointer; font-size: 24px; color: var(--gray-400); background: none; border: none; line-height: 1; transition: color 0.2s; }
+.modal-close:hover { color: var(--gray-700); }
+.modal-body { padding: 20px 24px; }
+.modal-footer { padding: 14px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; position: sticky; bottom: 0; background: #fff; border-radius: 0 0 var(--radius-lg) var(--radius-lg); flex-wrap: wrap; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+/* ========== 表单 ========== */
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 5px; }
+.form-group label .req { color: var(--accent); }
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 8px 12px; border: 1px solid var(--gray-300); border-radius: 6px;
+    font-size: 13px; font-family: var(--font); color: var(--gray-800); background: #fff; transition: border-color 0.2s;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,82,155,0.08); }
+.form-group textarea { resize: vertical; min-height: 70px; }
+.form-group input[readonly] { background: var(--gray-50); color: var(--gray-500); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+/* ========== 文件上传 ========== */
+.upload-area {
+    border: 2px dashed var(--gray-300); border-radius: 8px; padding: 20px; text-align: center;
+    cursor: pointer; transition: all 0.2s; background: #fafbfc;
+}
+.upload-area:hover { border-color: var(--primary); background: var(--primary-light); }
+.upload-icon { font-size: 28px; color: var(--gray-400); margin-bottom: 6px; }
+.upload-text { font-size: 13px; color: var(--gray-600); }
+.upload-hint { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
+.file-list { margin-top: 10px; }
+.file-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--gray-50);
+    border-radius: 8px; font-size: 13px; color: var(--gray-700); margin-bottom: 6px; border: 1px solid var(--gray-200);
+}
+.file-item .file-icon { font-size: 18px; flex-shrink: 0; }
+.file-item .file-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+.file-item .file-size { font-size: 11px; color: var(--gray-400); flex-shrink: 0; }
+.file-item .file-time { font-size: 11px; color: var(--gray-400); flex-shrink: 0; }
+.file-item .file-action { cursor: pointer; color: var(--primary); font-size: 12px; flex-shrink: 0; }
+.file-item .file-action:hover { text-decoration: underline; }
+.file-item.is-new { border-left: 3px solid var(--purple); background: var(--purple-light); }
+.file-item .file-remove { cursor: pointer; color: var(--gray-400); font-size: 16px; }
+.file-item .file-remove:hover { color: var(--accent); }
+/* ========== 详情 ========== */
+.detail-section { margin-bottom: 22px; }
+.detail-title { font-size: 14px; font-weight: 700; color: var(--gray-900); margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid var(--primary-light); display: flex; align-items: center; gap: 6px; }
+.detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+.detail-item { background: var(--gray-50); border-radius: 8px; padding: 12px 14px; border: 1px solid var(--gray-100); }
+.detail-item .label { font-size: 11px; color: var(--gray-500); font-weight: 600; margin-bottom: 3px; }
+.detail-item .value { font-size: 14px; font-weight: 600; color: var(--gray-800); }
+/* ========== 时间线 ========== */
+.timeline { position: relative; padding-left: 24px; }
+.timeline::before { content: ''; position: absolute; left: 8px; top: 6px; bottom: 6px; width: 2px; background: var(--gray-200); }
+.timeline-item { position: relative; margin-bottom: 18px; }
+.timeline-item:last-child { margin-bottom: 0; }
+.timeline-item::before { content: ''; position: absolute; left: -19px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--gray-300); border: 2px solid #fff; box-shadow: 0 0 0 2px var(--gray-200); }
+.timeline-item.primary::before { background: var(--primary); box-shadow: 0 0 0 2px var(--primary-light); }
+.timeline-item.warning::before { background: var(--warning); box-shadow: 0 0 0 2px var(--warning-light); }
+.timeline-item.success::before { background: var(--success); box-shadow: 0 0 0 2px var(--success-light); }
+.timeline-item.danger::before { background: var(--accent); box-shadow: 0 0 0 2px var(--accent-light); }
+.timeline-item.purple::before { background: var(--purple); box-shadow: 0 0 0 2px var(--purple-light); }
+.timeline-header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.timeline-time { font-size: 11px; color: var(--gray-400); font-weight: 500; }
+.timeline-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 8px; }
+.timeline-content { font-size: 13px; color: var(--gray-700); margin-top: 3px; }
+/* ========== 提示条 ========== */
+.alert { padding: 12px 16px; border-radius: 8px; font-size: 13px; display: flex; align-items: flex-start; gap: 8px; margin-bottom: 14px; line-height: 1.6; }
+.alert-info { background: var(--primary-light); color: var(--primary-dark); border: 1px solid #c5d9e8; }
+.alert-warning { background: var(--warning-light); color: #92400e; border: 1px solid #fde68a; }
+.alert-danger { background: var(--accent-light); color: #991b1b; border: 1px solid #fecaca; }
+.alert-purple { background: var(--purple-light); color: #5b21b6; border: 1px solid #c4b5fd; }
+.alert-success { background: var(--success-light); color: #065f46; border: 1px solid #a7f3d0; }
+/* ========== Toast ========== */
+#toast {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
+    background: var(--gray-900); color: #fff; padding: 12px 24px; border-radius: 8px;
+    font-size: 13px; font-weight: 500; z-index: 999; transition: transform 0.3s ease;
+    box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 8px;
+}
+#toast.show { transform: translateX(-50%) translateY(0); }
+#toast.success { background: #065f46; }
+#toast.error { background: #991b1b; }
+/* ========== 复选框 ========== */
+.checkbox-row { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; color: var(--gray-700); }
+.checkbox-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary); cursor: pointer; }
+/* ========== 响应式 ========== */
+@media (max-width: 768px) {
+    .main-content { padding: 12px; }
+    .page-header { flex-direction: column; align-items: flex-start; }
+    .filter-bar { flex-direction: column; align-items: stretch; }
+    .filter-item { min-width: 100%; }
+    .form-row { grid-template-columns: 1fr; }
+    .detail-grid { grid-template-columns: 1fr 1fr; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .modal { width: 95%; }
+    .role-switcher { margin: 0 8px; }
+    .role-btn { padding: 5px 10px; font-size: 12px; }
+    .user-name, .user-role { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== 顶部导航 ========== -->
+<nav class="top-nav">
+    <div class="logo-area">
+        <div class="logo-icon hq" id="logoIcon">格</div>
+        <span class="logo-text">格力市场稽查</span>
+        <span class="logo-sub" id="logoSub">| 确认函管理 · 总部端</span>
+    </div>
+    <div class="role-switcher">
+        <button class="role-btn active" id="roleHq" onclick="switchRole('hq')">🏢 总部端</button>
+        <button class="role-btn" id="roleBranch" onclick="switchRole('branch')">🏪 销司端</button>
+    </div>
+    <div class="user-info">
+        <div class="user-avatar hq" id="userAvatar">稽</div>
+        <span class="user-name" id="userName">张稽查</span>
+        <span class="user-role" id="userRole">市场稽查员</span>
+    </div>
+</nav>
+
+<!-- ========== 主内容 ========== -->
+<div class="main-content">
+    <div class="page-header">
+        <div>
+            <div class="page-title" id="pageTitle">确认函管理</div>
+            <div class="page-desc" id="pageDesc">以红头文件形式下发确认函，跟踪销司反馈，完成二次申诉复核</div>
+        </div>
+        <div class="header-actions" id="headerActions"></div>
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="stats-row" id="statsRow"></div>
+
+    <!-- 列表 -->
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title" id="listTitle">📋 确认函列表</span>
+            <span style="font-size:12px;color:var(--gray-500);" id="listCount"></span>
+        </div>
+        <div class="card-body">
+            <div class="filter-bar" id="filterBar"></div>
+            <div class="table-wrap">
+                <table id="dataTable">
+                    <thead id="tableHead"></thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== 弹窗容器 ========== -->
+<div id="modalContainer"></div>
+<div id="toast"></div>
+
+<script>
+/* ============================================================
+   数据层
+   ============================================================ */
+const STORAGE_KEY = 'geli_confirm_v1';
+
+function now() {
+    const d = new Date();
+    const p = n => n < 10 ? '0' + n : n;
+    return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+function defaultData() {
+    return [
+        {
+            id: 'QRH-2026-08-001',
+            company: '浙江销司',
+            period: '2026-08',
+            barcodeCount: 25,
+            appealCount: 0,
+            status: '确认中',
+            attachment: '浙江销司_2026年8月_违规跨区处罚确认函.pdf',
+            attachmentSize: '2.4 MB',
+            appealFiles: [],
+            hasSupplement: false,
+            remark: '暂无内部备注。',
+            createdAt: '2026-08-20 10:30',
+            timeline: [
+                { time: '2026-08-20 10:30', role: '总部操作', type: 'primary', text: '总部提交确认函，状态：确认中' },
+                { time: '2026-08-20 10:31', role: '系统通知', type: 'primary', text: '系统通知已发送至浙江销司（状态不变）' }
+            ]
+        },
+        {
+            id: 'QRH-2026-08-006',
+            company: '河南销司',
+            period: '2026-08',
+            barcodeCount: 22,
+            appealCount: 3,
+            status: '确认中',
+            attachment: '河南销司_2026年8月_违规跨区处罚确认函（第二批）.pdf',
+            attachmentSize: '1.8 MB',
+            appealFiles: [
+                { name: '河南销司_2026年8月_申诉材料包.zip', size: '10.5 MB', time: '2026-08-25 09:15' }
+            ],
+            hasSupplement: true,
+            remark: '总部要求补充责任划分协议。',
+            createdAt: '2026-08-22 10:00',
+            timeline: [
+                { time: '2026-08-22 10:00', role: '总部操作', type: 'primary', text: '总部提交确认函，状态：确认中' },
+                { time: '2026-08-25 09:15', role: '销司操作', type: 'warning', text: '销司提交申诉材料，申诉机器数量3台，状态变更为：复核中' },
+                { time: '2026-08-27 14:00', role: '总部操作', type: 'purple', text: '总部发起补充材料请求，状态变更为：确认中' }
+            ]
+        },
+        {
+            id: 'QRH-2026-07-002',
+            company: '山东销司',
+            period: '2026-07',
+            barcodeCount: 18,
+            appealCount: 5,
+            status: '复核中',
+            attachment: '山东销司_2026年7月_违规跨区处罚确认函.pdf',
+            attachmentSize: '2.1 MB',
+            appealFiles: [
+                { name: '山东销司_2026年7月_申诉材料包.zip', size: '15.2 MB', time: '2026-07-20 09:15' },
+                { name: '山东销司_2026年7月_申诉材料包_补充版.zip', size: '8.4 MB', time: '2026-07-25 16:20', isNew: true }
+            ],
+            hasSupplement: true,
+            remark: '暂无内部备注。',
+            createdAt: '2026-07-18 14:00',
+            timeline: [
+                { time: '2026-07-18 14:00', role: '总部操作', type: 'primary', text: '总部提交确认函，状态：确认中' },
+                { time: '2026-07-20 09:15', role: '销司操作', type: 'warning', text: '销司提交申诉材料，申诉机器数量3台，状态变更为：复核中' },
+                { time: '2026-07-22 10:00', role: '总部操作', type: 'purple', text: '总部发起补充材料请求，状态变更为：确认中' },
+                { time: '2026-07-25 16:20', role: '销司操作', type: 'purple', text: '销司提交补充材料，新增申诉机器2台，累计申诉机器数量5台，状态变更为：复核中' }
+            ]
+        },
+        {
+            id: 'QRH-2026-05-004',
+            company: '湖北销司',
+            period: '2026-05',
+            barcodeCount: 20,
+            appealCount: 3,
+            status: '已完成',
+            attachment: '湖北销司_2026年5月_违规跨区处罚确认函.pdf',
+            attachmentSize: '2.6 MB',
+            appealFiles: [
+                { name: '湖北销司_2026年5月_申诉材料包.zip', size: '12.6 MB', time: '2026-05-18 10:00' }
+            ],
+            hasSupplement: false,
+            remark: '复核完毕，申诉部分有效，最终处罚金额调整为 ¥8,000。',
+            createdAt: '2026-05-15 09:00',
+            timeline: [
+                { time: '2026-05-15 09:00', role: '总部操作', type: 'primary', text: '总部提交确认函，状态：确认中' },
+                { time: '2026-05-18 10:00', role: '销司操作', type: 'warning', text: '销司提交申诉材料，申诉机器数量3台，状态变更为：复核中' },
+                { time: '2026-05-20 14:30', role: '总部操作', type: 'success', text: '总部复核完结，状态变更为：已完成' }
+            ]
+        },
+        {
+            id: 'QRH-2026-04-005',
+            company: '四川销司',
+            period: '2026-04',
+            barcodeCount: 15,
+            appealCount: 0,
+            status: '已作废',
+            attachment: '四川销司_2026年4月_违规跨区处罚确认函.pdf',
+            attachmentSize: '1.5 MB',
+            appealFiles: [],
+            hasSupplement: false,
+            remark: '该确认函因信息错误，已作废。',
+            createdAt: '2026-04-10 16:00',
+            timeline: [
+                { time: '2026-04-10 16:00', role: '总部操作', type: 'primary', text: '总部提交确认函，状态：确认中' },
+                { time: '2026-04-11 10:00', role: '总部操作', type: 'danger', text: '总部作废确认函，状态变更为：已作废' }
+            ]
+        }
+    ];
+}
+
+let state = {
+    role: 'hq',
+    confirmations: [],
+    hqFilter: { id: '', company: '', status: '', period: '' },
+    branchFilter: { id: '', status: '', period: '' }
+};
+
+function loadData() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                state.confirmations = parsed;
+                return;
+            }
+        }
+    } catch(e) {}
+    state.confirmations = defaultData();
+    saveData();
+}
+
+function saveData() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state.confirmations));
+    } catch(e) {}
+}
+
+function resetData() {
+    if (confirm('确定要重置为演示数据吗？当前所有操作记录将被清空。')) {
+        state.confirmations = defaultData();
+        saveData();
+        render();
+        toast('演示数据已重置', 'success');
+    }
+}
+
+/* ============================================================
+   工具函数
+   ============================================================ */
+function esc(s) {
+    if (s === null || s === undefined) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function toast(msg, type) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = 'show ' + (type || '');
+    clearTimeout(el._t);
+    el._t = setTimeout(() => { el.className = ''; }, 2200);
+}
+
+function statusBadge(status) {
+    const map = {
+        '确认中': 'badge-info',
+        '复核中': 'badge-warning',
+        '已完成': 'badge-success',
+        '已作废': 'badge-gray'
+    };
+    return `<span class="badge ${map[status] || 'badge-gray'}">${status}</span>`;
+}
+
+function statusColor(status) {
+    const map = {
+        '确认中': 'var(--primary)',
+        '复核中': 'var(--warning)',
+        '已完成': 'var(--success)',
+        '已作废': 'var(--gray-500)'
+    };
+    return map[status] || 'var(--gray-500)';
+}
+
+function appealCountDisplay(c) {
+    if (c.status === '确认中' && !c.hasSupplement) return '—';
+    if (c.status === '已作废') return '0';
+    if (c.appealCount > 0) {
+        let suffix = '';
+        if (c.hasSupplement && c.timeline.some(t => t.text.includes('新增申诉机器'))) {
+            suffix = ' <span style="font-size:10px;color:var(--gray-400);">(累计)</span>';
+        }
+        return `<strong>${c.appealCount}</strong>${suffix}`;
+    }
+    return '—';
+}
+
+function genId() {
+    const d = new Date();
+    const p = n => n < 10 ? '0' + n : n;
+    const period = `${d.getFullYear()}-${p(d.getMonth()+1)}`;
+    const prefix = 'QRH-' + period + '-';
+    let max = 0;
+    state.confirmations.forEach(c => {
+        if (c.id.startsWith(prefix)) {
+            const n = parseInt(c.id.replace(prefix, ''));
+            if (n > max) max = n;
+        }
+    });
+    return prefix + String(max + 1).padStart(3, '0');
+}
+
+/* ============================================================
+   渲染
+   ============================================================ */
+function render() {
+    renderHeader();
+    renderStats();
+    renderFilters();
+    renderTable();
+}
+
+function renderHeader() {
+    const isHq = state.role === 'hq';
+    document.getElementById('logoIcon').className = 'logo-icon ' + (isHq ? 'hq' : 'branch');
+    document.getElementById('logoIcon').textContent = isHq ? '格' : '浙';
+    document.getElementById('logoSub').textContent = isHq ? '| 确认函管理 · 总部端' : '| 确认函处理 · 浙江销司';
+    document.getElementById('userAvatar').className = 'user-avatar ' + (isHq ? 'hq' : 'branch');
+    document.getElementById('userAvatar').textContent = isHq ? '稽' : '浙';
+    document.getElementById('userName').textContent = isHq ? '张稽查' : '浙江销司';
+    document.getElementById('userRole').textContent = isHq ? '市场稽查员' : '销售公司账户';
+    document.getElementById('pageTitle').textContent = isHq ? '确认函管理' : '确认函处理';
+    document.getElementById('pageDesc').textContent = isHq
+        ? '以红头文件形式下发确认函，跟踪销司反馈，完成二次申诉复核'
+        : '查看总部下发的确认函，下载红头文件，选择确认无申诉或提交申诉材料';
+    document.getElementById('listTitle').textContent = isHq ? '📋 确认函列表' : '📬 确认函列表';
+
+    document.getElementById('roleHq').className = 'role-btn' + (isHq ? ' active' : '');
+    document.getElementById('roleBranch').className = 'role-btn' + (!isHq ? ' active branch' : '');
+
+    const actions = document.getElementById('headerActions');
+    if (isHq) {
+        actions.innerHTML = `
+            <button class="btn btn-outline" onclick="resetData()">🔄 重置数据</button>
+            <button class="btn btn-outline" onclick="exportCSV()">📥 导出数据</button>
+            <button class="btn btn-primary" onclick="openCreate()">＋ 新建确认函</button>
+        `;
+    } else {
+        actions.innerHTML = `
+            <button class="btn btn-outline" onclick="resetData()">🔄 重置数据</button>
+        `;
+    }
+}
+
+function renderStats() {
+    const list = state.confirmations;
+    const confirming = list.filter(c => c.status === '确认中').length;
+    const reviewing = list.filter(c => c.status === '复核中').length;
+    const done = list.filter(c => c.status === '已完成').length;
+    const voided = list.filter(c => c.status === '已作废').length;
+    const supplement = list.filter(c => c.hasSupplement && c.status === '确认中').length;
+
+    document.getElementById('statsRow').innerHTML = `
+        <div class="stat-card"><div class="stat-icon blue">📬</div><div><div class="stat-value">${confirming}</div><div class="stat-label">确认中</div></div></div>
+        <div class="stat-card"><div class="stat-icon yellow">📝</div><div><div class="stat-value">${reviewing}</div><div class="stat-label">复核中</div></div></div>
+        <div class="stat-card"><div class="stat-icon purple">📎</div><div><div class="stat-value">${supplement}</div><div class="stat-label">待补充材料</div></div></div>
+        <div class="stat-card"><div class="stat-icon green">✅</div><div><div class="stat-value">${done}</div><div class="stat-label">已完成</div></div></div>
+        <div class="stat-card"><div class="stat-icon red">🗑️</div><div><div class="stat-value">${voided}</div><div class="stat-label">已作废</div></div></div>
+    `;
+}
+
+function renderFilters() {
+    const isHq = state.role === 'hq';
+    const f = isHq ? state.hqFilter : state.branchFilter;
+    const companies = [...new Set(state.confirmations.map(c => c.company))];
+    const periods = [...new Set(state.confirmations.map(c => c.period))].sort().reverse();
+
+    let html = '';
+    if (isHq) {
+        html += `<div class="filter-item"><label>确认函编号</label><input type="text" id="filterId" value="${esc(f.id)}" placeholder="输入编号搜索"></div>`;
+        html += `<div class="filter-item"><label>销司名称</label><select id="filterCompany">
+            <option value="">全部销司</option>
+            ${companies.map(c => `<option value="${esc(c)}" ${f.company===c?'selected':''}>${esc(c)}</option>`).join('')}
+        </select></div>`;
+        html += `<div class="filter-item"><label>状态</label><select id="filterStatus">
+            <option value="">全部状态</option>
+            ${['确认中','复核中','已完成','已作废'].map(s => `<option value="${s}" ${f.status===s?'selected':''}>${s}</option>`).join('')}
+        </select></div>`;
+        html += `<div class="filter-item"><label>所属期间</label><select id="filterPeriod">
+            <option value="">全部期间</option>
+            ${periods.map(p => `<option value="${p}" ${f.period===p?'selected':''}>${p}</option>`).join('')}
+        </select></div>`;
+        html += `<div class="filter-actions">
+            <button class="btn btn-primary btn-sm" onclick="applyFilter()">🔍 查询</button>
+            <button class="btn btn-outline btn-sm" onclick="resetFilter()">🔄 重置</button>
+        </div>`;
+    } else {
+        html += `<div class="filter-item"><label>确认函编号</label><input type="text" id="filterId" value="${esc(f.id)}" placeholder="输入编号搜索"></div>`;
+        html += `<div class="filter-item"><label>状态</label><select id="filterStatus">
+            <option value="">全部状态</option>
+            ${['确认中','复核中','已完成','已作废'].map(s => `<option value="${s}" ${f.status===s?'selected':''}>${s}</option>`).join('')}
+        </select></div>`;
+        html += `<div class="filter-item"><label>所属期间</label><select id="filterPeriod">
+            <option value="">全部期间</option>
+            ${periods.map(p => `<option value="${p}" ${f.period===p?'selected':''}>${p}</option>`).join('')}
+        </select></div>`;
+        html += `<div class="filter-actions">
+            <button class="btn btn-primary btn-sm" onclick="applyFilter()">🔍 查询</button>
+            <button class="btn btn-outline btn-sm" onclick="resetFilter()">🔄 重置</button>
+        </div>`;
+    }
+    document.getElementById('filterBar').innerHTML = html;
+}
+
+function getFilteredList() {
+    const isHq = state.role === 'hq';
+    const f = isHq ? state.hqFilter : state.branchFilter;
+    return state.confirmations.filter(c => {
+        if (f.id && !c.id.toLowerCase().includes(f.id.toLowerCase())) return false;
+        if (isHq && f.company && c.company !== f.company) return false;
+        if (f.status && c.status !== f.status) return false;
+        if (f.period && c.period !== f.period) return false;
+        return true;
+    });
+}
+
+function renderTable() {
+    const isHq = state.role === 'hq';
+    const list = getFilteredList();
+    document.getElementById('listCount').textContent = `共 ${list.length} 条记录`;
+
+    const thead = document.getElementById('tableHead');
+    const tbody = document.getElementById('tableBody');
+
+    if (isHq) {
+        thead.innerHTML = `<tr>
+            <th>确认函编号</th><th>销司名称</th><th>所属期间</th><th>条码数量</th>
+            <th>申诉机器数量</th><th>提交时间</th><th>状态</th><th style="width:200px;">操作</th>
+        </tr>`;
+    } else {
+        thead.innerHTML = `<tr>
+            <th>确认函编号</th><th>所属期间</th><th>条码数量</th>
+            <th>申诉机器数量</th><th>红头文件</th><th>状态</th><th style="width:220px;">操作</th>
+        </tr>`;
+    }
+
+    if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="${isHq?8:7}"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">暂无匹配的确认函</div></div></td></tr>`;
+        return;
+    }
+
+    let rows = '';
+    list.forEach(c => {
+        let rowClass = '';
+        if (c.status === '已作废') rowClass = 'row-void';
+        else if (c.status === '复核中') rowClass = 'row-appeal';
+        else if (c.hasSupplement && c.status === '确认中') rowClass = 'row-supplement';
+
+        if (isHq) {
+            rows += `<tr class="${rowClass}">
+                <td><a class="action-link" onclick="openDetail('${c.id}')">${esc(c.id)}</a></td>
+                <td>${esc(c.company)}</td>
+                <td>${esc(c.period)}</td>
+                <td>${c.barcodeCount}</td>
+                <td>${appealCountDisplay(c)}</td>
+                <td>${esc(c.createdAt)}</td>
+                <td>${statusBadge(c.status)}${c.hasSupplement && c.status==='确认中'?' <span class="badge badge-purple">📎 待补充</span>':''}</td>
+                <td>
+                    <a class="action-link" onclick="openDetail('${c.id}')">查看</a>
+                    <span class="action-sep">|</span>
+                    <a class="action-link success" onclick="openComplete('${c.id}')">完结</a>
+                    <span class="action-sep">|</span>
+                    <a class="action-link danger" onclick="openVoid('${c.id}')">作废</a>
+                </td>
+            </tr>`;
+        } else {
+            let ops = '';
+            if (c.status === '确认中' && !c.hasSupplement) {
+                ops = `<button class="btn btn-success btn-xs" onclick="openConfirmNoAppeal('${c.id}')">✅ 确认无申诉</button>
+                       <button class="btn btn-warning btn-xs" onclick="openAppeal('${c.id}')" style="margin-left:6px;">📤 提交申诉</button>`;
+            } else if (c.status === '确认中' && c.hasSupplement) {
+                ops = `<button class="btn btn-purple btn-xs" onclick="openSupplement('${c.id}')">📎 补充材料</button>`;
+            } else if (c.status === '复核中') {
+                ops = `<button class="btn btn-outline btn-xs" onclick="openDetail('${c.id}')">📊 查看进度</button>`;
+            } else {
+                ops = `<button class="btn btn-outline btn-xs" onclick="openDetail('${c.id}')">查看详情</button>`;
+            }
+
+            rows += `<tr class="${rowClass}">
+                <td><a class="action-link" onclick="openDetail('${c.id}')">${esc(c.id)}</a></td>
+                <td>${esc(c.period)}</td>
+                <td>${c.barcodeCount}</td>
+                <td>${appealCountDisplay(c)}</td>
+                <td><a class="action-link" onclick="openDetail('${c.id}')">📄 查看</a></td>
+                <td>${statusBadge(c.status)}${c.hasSupplement && c.status==='确认中'?' <span class="badge badge-purple">📎 待补充</span>':''}${c.hasSupplement && c.status==='复核中'?' <span class="badge badge-purple">📎 补充过</span>':''}</td>
+                <td>${ops}</td>
+            </tr>`;
+        }
+    });
+    tbody.innerHTML = rows;
+}
+
+/* ============================================================
+   角色切换 & 筛选
+   ============================================================ */
+function switchRole(role) {
+    state.role = role;
+    render();
+}
+
+function applyFilter() {
+    const isHq = state.role === 'hq';
+    const f = isHq ? state.hqFilter : state.branchFilter;
+    f.id = (document.getElementById('filterId') || {}).value || '';
+    f.status = (document.getElementById('filterStatus') || {}).value || '';
+    f.period = (document.getElementById('filterPeriod') || {}).value || '';
+    if (isHq) {
+        f.company = (document.getElementById('filterCompany') || {}).value || '';
+    }
+    renderTable();
+}
+
+function resetFilter() {
+    const isHq = state.role === 'hq';
+    if (isHq) {
+        state.hqFilter = { id: '', company: '', status: '', period: '' };
+    } else {
+        state.branchFilter = { id: '', status: '', period: '' };
+    }
+    render();
+}
+
+/* ============================================================
+   弹窗基础
+   ============================================================ */
+function showModal(id) {
+    const el = document.getElementById(id);
+    if (el) {
+        el.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function hideModal(id) {
+    const el = document.getElementById(id);
+    if (el) {
+        el.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+function closeAllModals() {
+    document.querySelectorAll('.modal-overlay.active').forEach(el => el.classList.remove('active'));
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeAllModals();
+});
+
+/* ============================================================
+   总部端操作
+   ============================================================ */
+function openCreate() {
+    const companies = ['浙江销司','河南销司','山东销司','湖北销司','四川销司','广东销司','江苏销司'];
+    const periods = ['2026-09','2026-08','2026-07'];
+    const html = `
+    <div class="modal-overlay" id="createModal">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="modal-title">📄 新建确认函</span>
+                <button class="modal-close" onclick="hideModal('createModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info"><span>💡</span><span>提交后确认函将直接下发至销司，状态变为<strong>确认中</strong>。销司可选择确认无申诉或提交申诉材料。</span></div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>确认函编号</label>
+                        <input type="text" id="newId" value="${genId()}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>销司名称 <span class="req">*</span></label>
+                        <select id="newCompany">
+                            <option value="">请选择销司</option>
+                            ${companies.map(c => `<option value="${c}">${c}</option>`).join('')}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>所属期间 <span class="req">*</span></label>
+                        <select id="newPeriod">
+                            ${periods.map(p => `<option value="${p}">${p}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>条码数量 <span class="req">*</span></label>
+                        <input type="number" id="newBarcode" min="1" value="1" placeholder="请输入涉及条码总数">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>上传确认函文件（红头文件） <span class="req">*</span></label>
+                    <div class="upload-area" onclick="document.getElementById('newFileInput').click()">
+                        <div class="upload-icon">📄</div>
+                        <div class="upload-text">点击上传确认函文件</div>
+                        <div class="upload-hint">支持 PDF、Word 格式</div>
+                    </div>
+                    <input type="file" id="newFileInput" style="display:none;" accept=".pdf,.doc,.docx" onchange="handleNewFile(this)">
+                    <div class="file-list" id="newFileList"></div>
+                </div>
+                <div class="form-group">
+                    <label>备注（内部）</label>
+                    <textarea id="newRemark" placeholder="填写内部备注，销司不可见"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="hideModal('createModal')">取消</button>
+                <button class="btn btn-primary" onclick="doCreate()">提交并下发</button>
+            </div>
+        </div>
+    </div>`;
+    document.getElementById('modalContainer').insertAdjacentHTML('beforeend', html);
+    showModal('createModal');
+}
+
+function handleNewFile(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const size = (file.size / 1024 / 1024).toFixed(1) + ' MB';
+    document.getElementById('newFileList').innerHTML = `
+        <div class="file-item">
+            <span class="file-icon">📄</span>
+            <span class="file-name">${esc(file.name)}</span>
+            <span class="file-size">${size}</span>
+        </div>`;
+}
+
+function doCreate() {
+    const company = document.getElementById('newCompany').value;
+    const period = document.getElementById('newPeriod').value;
+    const barcode = parseInt(document.getElementById('newBarcode').value) || 0;
+    const remark = document.getElementById('newRemark').value.trim();
+    const fileEl = document.querySelector('#newFileList .file-name');
+    const fileName = fileEl ? fileEl.textContent : (company + '_' + period + '_违规跨区处罚确认函.pdf');
+
+    if (!company) { toast('请选择销司', 'error'); return; }
+    if (barcode < 1) { toast('条码数量必须大于0', 'error'); return; }
+
+    const id = document.getElementById('newId').value;
+    const time = now();
+    const newC = {
+        id: id,
+        company: company,
+        period: period,
+        barcodeCount: barcode,
+        appealCount: 0,
+        status: '确认中',
+        attachment: fileName,
+        attachmentSize: '2.0 MB',
+        appealFiles: [],
+        hasSupplement: false,
+        remark: remark || '暂无内部备注。',
+        createdAt: time,
+        timeline: [
+            { time: time, role: '总部操作', type: 'primary', text: '总部提交确认函，状态：确认中' }
+        ]
+    };
+    state.confirmations.unshift(newC);
+    saveData();
+    hideModal('createModal');
+    render();
+    toast('确认函已提交并下发', 'success');
+}
+
+function openComplete(id) {
+    const c = state.confirmations.find(x => x.id === id);
+    if (!c) return;
+    const html = `
+    <div class="modal-overlay" id="completeModal">
+        <div class="modal narrow">
+            <div class="modal-header">
+                <span class="modal-title">✅ 复核完结</span>
+                <button class="modal-close" onclick="hideModal('completeModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success"><span>✅</span><span>请确认已完成复核，完结后确认函状态将变为<strong>已完成</strong>。</span></div>
+                <div class="form-row">
+                    <div class="form-group"><label>确认函编号</label><input type="text" value="${esc(c.id)}" readonly></div>
+                    <div class="form-group"><label>销司名称</label><input type="text" value="${esc(c.company)}" readonly></div>
+                </div>
+                ${c.appealFiles.length > 0 ? `
+                <div class="form-group">
+                    <label>申诉材料包</label>
+                    ${c.appealFiles.map(f => `
+                        <div class="file-item">
+                            <span class="file-icon">📦</span>
+                            <span class="file-name">${esc(f.name)}</span>
+                            <span class="file-size">${f.size}</span>
+                            <span class="file-action">👁 查看</span>
+                        </div>
+                    `).join('')}
+                </div>` : ''}
+                <div class="form-group">
+                    <label>复核意见 <span class="req">*</span></label>
+                    <textarea id="completeNote" placeholder="请填写复核结论，例如：申诉部分有效，调整处罚金额为XXX元；或维持原处罚等"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>最终处罚金额（元）</label>
+                    <input type="number" id="completeAmount" placeholder="如维持原处罚，可留空">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="hideModal('completeModal')">取消</button>
+                <button class="btn btn-success" onclick="doComplete('${c.id}')">确认完结</button>
+            </div>
+        </div>
+    </div>`;
+    document.getElementById('modalContainer').insertAdjacentHTML('beforeend', html);
+    showModal('completeModal');
+}
+
+function doComplete(id) {
+    const c = state.confirmations.find(x => x.id === id);
+    if (!c) return;
+    const note = document.getElementById('completeNote').value.trim();
+    const amount = document.getElementById('completeAmount').value.trim();
+    if (!note) { toast('请填写复核意见', 'error'); return; }
+
+    const time = now();
+    c.status = '已完成';
+    let text = '总部复核完结，状态变更为：已完成';
+    if (amount) text += `，最终处罚金额：¥${amount}`;
+    if (note) text += `。复核意见：${note}`;
+    c.timeline.push({ time: time, role: '总部操作', type: 'success', text: text });
+    c.remark = note || c.remark;
+    saveData();
+    hideModal('completeModal');
+    render();
+    toast('确认函已完结', 'success');
+}
+
+function openVoid(id) {
+    const c = state.confirmations.find(x => x.id === id);
+    if (!c) return;
+    const html = `
+    <div class="modal-overlay" id="voidModal">
+        <div class="modal narrow">
+            <div class="modal-header">
+                <span class="modal-title">🗑️ 作废确认函</span>
+                <button class="modal-close" onclick="hideModal('voidModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger"><span>⚠️</span><span>作废后确认函将不可恢复，销司端将无法看到此函。请确认是否继续？</span></div>
+                <div class="form-group"><label>确认函编号</label><input type="text" value="${esc(c.id)}" readonly></div>
+                <div class="form-group">
+                    <label>作废原因 <span class="req">*</span></label>
+                    <textarea id="voidReason" placeholder="请填写作废原因，用于审计留痕"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="hideModal('voidModal')">取消</button>
+                <button class="btn btn-danger" onclick="doVoid('${c.id}')">确认作废</button>
+            </div>
+        </div>
+    </div>`;
+    document.getElementById('modalContainer').insertAdjacentHTML('beforeend', html);
+    showModal('voidModal');
+}
+
+function doVoid(id) {
+    const c = state.confirmations.find(x => x.id === id);
+    if (!c) return;
+    const reason = document.getElementById('voidReason').value.trim();
+    if (!reason) { toast('请填写作废原因', 'error'); return; }
+
+    const time = now();
+    c.status = '已作废';
+    c.timeline.push({ time: time, role: '总部操作', type: 'danger', text: `总部作废确认函，状态变更为：已作废。原因：${reason}` });
+    c.remark = reason;
+    saveData();
+    hideModal('voidModal');
+    render();
+    toast('确认函已作废', 'success');
+}
+
+function openSupplementFromHQ(id) {
+    const c = state.confirmations.find(x => x.id === id);
+    if (!c) return;
+    const html = `
+    <div class="modal-overlay" id="hqSupplementModal">
+        <div class="modal narrow">
+            <div class="modal-header">
+                <span class="modal-title">📎 发起补充材料</span>
+                <button class="modal-close" onclick="hideModal('hqSupplementModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-purple"><span>📎</span><span>确认将确认函 <strong>${esc(c.id)}</strong> 状态由 <strong>复核中</strong> 变更为 <strong>确认中</strong>，并通知销司补充材料？</span></div>
+                <div class="form-group">
+                    <label>补充说明（选填）</label>
+                    <textarea id="hqSupplementNote" placeholder="填写需要销司补充的具体材料或要求..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="hideModal('hqSupplementModal')">取消</button>
+                <button class="btn btn-purple" onclick="doHqSupplement('${c.id}')">确认发起</button>
+            </div>
+        </div>
+    </div>`;
+    document.getElementById('modalContainer').insertAdjacentHTML('beforeend', html);
+    showModal('hqSupplementModal');
+}
+
+function doHqSupplement(id) {
+    const c = state.confirmations.find(x => x.id === id);
+    if (!c) return;
+    const note = document.getElementById('hqSupplementNote').value.trim();
+    const time = now();
+    c.status = '确认中';
+    c.hasSupplement = true;
+    let text = '总部发起补充材料请求，状态变更为：确认中';
+    if (note) text += `。补充说明：${note}`;
+    c.timeline.push({ time: time, role: '总部操作', type: 'purple', text: text });
+    saveData();
+    hideModal('hqSupplementModal');
+    closeAllModals();
+    render();
+    toast('已发起补充材料，等待销司补充', 'success');
+}
+
+/* ============================================================
+   销司端操作
+   ============================================================ */
+function openConfirmNoAppeal(id) {
+    const c = state.confirmations.find(x => x.id === id);
+    if (!c) return;
+    const html = `
+    <div class="modal-overlay" id="noAppealModal">
+        <div class="modal narrow">
+            <div class="modal-header">
+                <span class="modal-title">✅ 确认无申诉</span>
+                <button class="modal-close" onclick="hideModal('noAppealModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning"><span>⚠️</span><span>确认后将视为贵司<strong>接受处罚</strong>，放弃申诉权利。此操作<strong>不可撤回</strong>。</span></div>
+                <div class="form-row">
+                    <div class="form-group"><label>确认函编号</label><input type="text" value="${esc(c.id)}" readonly></div>
+                    <div class="form-group"><label>条码数量</label><input type="text" value="${c.barcodeCount}" readonly></div>
+                </div>
+                <div class="form-group">
+                    <label>确认说明（选填）</label>
+                    <textarea id="noAppealNote" placeholder="如需补充说明，请在此填写..."></textarea>
+                </div>
+                <label class="checkbox-row">
+                    <input type="checkbox" id="noAppealCheck">
+                    我已知悉并确认接受上述处罚，放弃申诉权利。
+                </label>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="hideModal('noAppealModal')">取消</button>
+                <button class="btn btn-success" onclick="doConfirmNoAppeal('${c.id}')">确认无申诉</button>
+            </div>
+        </div>
+    </div>`;
+    document.getElementById('modalContainer').insertAdjacentHTML('beforeend', html);
+    showModal('noAppealModal');
+}
+
+function doConfirmNoAppeal(id) {
+    const c = state.confirmations.find(x => x.id === id);
+    if (!c) return;
+    if (!document.getElementById('noAppealCheck').checked) {
+        toast('请先勾选确认声明', 'error');
+        return;
+    }
+    const note = document.getElementById('noAppealNote').value.trim();
+    const time = now();
+    c.status = '已完成';
+    let text = '销司确认无申诉，状态变更为：已完成';
+    if (note) text += `。说明：${note}`;
+    c.timeline.push({ time: time, role: '销司操作', type: 'success', text: text });
+    saveData();
+    hideModal('noAppealModal');
+    render();
+    toast('已确认无申诉，确认函完结', 'success');
+}
+
+function openAppeal(id) {
+    const c = state.confirmations.find(x => x.id === id);
+    if (!c) return;
+    const html = `
+    <div class="modal-overlay" id="appealModal">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="modal-title">📤 提交申诉材料</span>
+                <button class="modal-close" onclick="hideModal('appealModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info"><span>ℹ️</span><span>请将贵司所有申诉材料打包为一个文件上传，提交后状态变更为<strong>复核中</strong>，稽查人员将依据材料进行二次复核。</span></div>
+                <div class="form-row">
+                    <div class="form-group"><label>确认函编号</label><input type="text" value="${esc(c.id)}" readonly></div>
+                    <div class="form-group">
+                        <label>申诉机器数量 <span class="req">*</span></label>
+                        <input type="number" id="appealCount" min="1" max="${c.barcodeCount}" value="1" placeholder="请输入有异议的机器数量">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>申诉说明 <span class="req">*</span></label>
+                    <textarea id="appealNote" placeholder="请简述申诉理由，例如：经销商已内部处罚、调货记录有误等..." style="min-height:80px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>上传申诉材料包 <span class="req">*</span></label>
+                    <div class="upload-area" onclick="document.getElementById('appealFileInput').click()">
+                        <div class="upload-icon">📁</div>
+                        <div class="upload-text">点击上传或拖拽文件到此处</div>
+                        <div class="upload-hint">支持 ZIP、RAR、7Z、PDF、Word 格式</div>
+                    </div>
+                    <input type="file" id="appealFileInput" style="display:none;" onchange="handleAppealFile(this, 'appealFileList')">
+                    <div class="file-list" id="appealFileList"></div>
+                </div>
+                <label class="checkbox-row">
+                    <input type="checkbox" id="appealCheck">
+                    我确认以上申诉材料真实有效，如有虚假愿承担相应责任。
+                </label>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="hideModal('appealModal')">取消</button>
+                <button class="btn btn-primary" onclick="doAppeal('${c.id}')">提交申诉</button>
+            </div>
+        </div>
+    </div>`;
+    document.getElementById('modalContainer').insertAdjacentHTML('beforeend', html);
+    showModal('appealModal');
+}
+
+function handleAppealFile(input, listId) {
+    const file = input.files[0];
+    if (!file) return;
+    const size = (file.size / 1024 / 1024).toFixed(1) + ' MB';
+    document.getElementById(listId).innerHTML = `
+        <div class="file-item">
+            <span class="file-icon">📦</span>
+            <span class="file-name">${esc(file.name)}</span>
+            <span class="file-size">${size}</span>
+            <span class="file-remove" onclick="this.parentElement.remove()">✕</span>
+        </div>`;
+}
+
+function doAppeal(id) {
+    const c = state.confirmations.find(x => x.id === id);
+    if (!c) return;
+    if (!document.getElementById('appealCheck').checked) {
+        toast('请先勾选确认声明', 'error');
+        return;
+    }
+    const count = parseInt(document.getElementById('appealCount').value) || 0;
+    const note = document.getElementById('appealNote').value.trim();
+    if (count < 1) { toast('请输入申诉机器数量', 'error'); return; }
+    if (!note) { toast('请填写申诉说明', 'error'); return; }
+
+    const fileEl = document.querySelector('#appealFileList .file-name');
+    const fileName = fileEl ? fileEl.textContent : (c.company + '_' + c.period + '_申诉材料包.zip');
+    const fileSizeEl = document.querySelector('#appealFileList .file-size');
+    const fileSize = fileSizeEl ? fileSizeEl.textContent : '10.0 MB';
+
+    const time = now();
+    c.status = '复核中';
+    c.appealCount = count;
+    c.appealFiles.push({ name: fileName, size: fileSize, time: time, note: note });
+    c.timeline.push({
+        time: time, role: '销司操作', type: 'warning',
+        text: `销司提交申诉材料，申诉机器数量${count}台，状态变更为：复核中`
+    });
+    saveData();
+    hideModal('appealModal');
+    render();
+    toast('申诉材料已提交，等待总部复核', 'success');
+}
+
+function openSupplement(id) {
+    const c = state.confirmations.find(x => x.id === id);
+    if (!c) return;
+    const prevFiles = c.appealFiles.map(f => `
+        <div class="file-item">
+            <span class="file-icon">📦</span>
+            <span class="file-name">${esc(f.name)}</span>
+            <span class="file-size">${f.size}</span>
+            <span class="file-time">${f.time}</span>
+            <span class="file-action">👁 预览</span>
+        </div>
+    `).join('') || '<div style="font-size:13px;color:var(--gray-400);padding:8px;">暂无已提交材料</div>';
+
+    const html = `
+    <div class="modal-overlay" id="branchSupplementModal">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="modal-title">📎 补充申诉材料</span>
+                <button class="modal-close" onclick="hideModal('branchSupplementModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-purple"><span>🔔</span><span>总部已退回确认函 <strong>${esc(c.id)}</strong>，请补充申诉材料后重新提交。</span></div>
+                <div class="detail-section">
+                    <div class="detail-title">📋 总部退回说明</div>
+                    <div style="background:var(--gray-50);padding:12px 16px;border-radius:8px;font-size:13px;color:var(--gray-700);border:1px solid var(--gray-100);">
+                        ${esc(c.remark && c.remark !== '暂无内部备注。' ? c.remark : '请补充相关材料，以便稽查人员进一步核实。')}
+                    </div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-title">📦 已提交申诉材料（历史）</div>
+                    <div class="file-list">${prevFiles}</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>确认函编号</label><input type="text" value="${esc(c.id)}" readonly></div>
+                    <div class="form-group">
+                        <label>补充申诉机器数量 <span class="req">*</span></label>
+                        <input type="number" id="suppCount" min="1" max="${c.barcodeCount - c.appealCount}" value="1" placeholder="请输入新增申诉机器数量">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>补充说明 <span class="req">*</span></label>
+                    <textarea id="suppNote" placeholder="请简述补充材料的内容..." style="min-height:80px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>上传补充材料包 <span class="req">*</span></label>
+                    <div class="upload-area" onclick="document.getElementById('suppFileInput').click()">
+                        <div class="upload-icon">📁</div>
+                        <div class="upload-text">点击上传或拖拽文件到此处</div>
+                        <div class="upload-hint">支持 ZIP、RAR、7Z、PDF、Word 格式</div>
+                    </div>
+                    <input type="file" id="suppFileInput" style="display:none;" onchange="handleAppealFile(this, 'suppFileList')">
+                    <div class="file-list" id="suppFileList"></div>
+                </div>
+                <label class="checkbox-row">
+                    <input type="checkbox" id="suppCheck">
+                    我确认以上补充材料真实有效，如有虚假愿承担相应责任。
+                </label>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="hideModal('branchSupplementModal')">取消</button>
+                <button class="btn btn-purple" onclick="doSupplement('${c.id}')">提交补充材料</button>
+            </div>
+        </div>
+    </div>`;
+    document.getElementById('modalContainer').insertAdjacentHTML('beforeend', html);
+    showModal('branchSupplementModal');
+}
+
+function doSupplement(id) {
+    const c = state.confirmations.find(x => x.id === id);
+    if (!c) return;
+    if (!document.getElementById('suppCheck').checked) {
+        toast('请先勾选确认声明', 'error');
+        return;
+    }
+    const count = parseInt(document.getElementById('suppCount').value) || 0;
+    const note = document.getElementById('suppNote').value.trim();
+    if (count < 1) { toast('请输入补充申诉机器数量', 'error'); return; }
+    if (!note) { toast('请填写补充说明', 'error'); return; }
+
+    const fileEl = document.querySelector('#suppFileList .file-name');
+    const fileName = fileEl ? fileEl.textContent : (c.company + '_' + c.period + '_申诉材料包_补充版.zip');
+    const fileSizeEl = document.querySelector('#suppFileList .file-size');
+    const fileSize = fileSizeEl ? fileSizeEl.textContent : '8.0 MB';
+
+    const time = now();
+    c.status = '复核中';
+    c.appealCount += count;
+    c.appealFiles.push({ name: fileName, size: fileSize, time: time, note: note, isNew: true });
+    c.timeline.push({
+        time: time, role: '销司操作', type: 'purple',
+        text: `销司提交补充材料，新增申诉机器${count}台，累计申诉机器数量${c.appealCount}台，状态变更为：复核中`
+    });
+    c.hasSupplement = false;
+    saveData();
+    hideModal('branchSupplementModal');
+    render();
+    toast('补充材料已提交，等待总部复核', 'success');
+}
+
+/* ============================================================
+   详情弹窗（两端共用）
+   ============================================================ */
+function openDetail(id) {
+    const c = state.confirmations.find(x => x.id === id);
+    if (!c) return;
+    const isHq = state.role === 'hq';
+
+    const appealFilesHtml = c.appealFiles.length > 0
+        ? c.appealFiles.map(f => `
+            <div class="file-item ${f.isNew ? 'is-new' : ''}">
+                <span class="file-icon">📦</span>
+                <span class="file-name">${esc(f.name)}</span>
+                <span class="file-size">${f.size}</span>
+                <span class="file-time">${f.time}</span>
+                <span class="file-action">👁 预览</span>
+                <span class="file-action">📥 下载</span>
+            </div>
+        `).join('')
+        : '<div style="font-size:13px;color:var(--gray-400);padding:8px;">暂无申诉材料</div>';
+
+    const timelineHtml = c.timeline.map(t => {
+        const tagStyle = {
+            primary: 'background:var(--primary-light);color:var(--primary);',
+            warning: 'background:var(--warning-light);color:#b45309;',
+            purple: 'background:var(--purple-light);color:var(--purple);',
+            success: 'background:var(--success-light);color:#047857;',
+            danger: 'background:var(--accent-light);color:#b91c1c;'
+        }[t.type] || 'background:var(--gray-100);color:var(--gray-600);';
+        return `
+        <div class="timeline-item ${t.type}">
+            <div class="timeline-header">
+                <span class="timeline-time">${esc(t.time)}</span>
+                <span class="timeline-tag" style="${tagStyle}">${esc(t.role)}</span>
+            </div>
+            <div class="timeline-content">${esc(t.text)}</div>
+        </div>`;
+    }).join('');
+
+    let footerHtml = `<button class="btn btn-outline" onclick="hideModal('detailModal')">关闭</button>`;
+    if (isHq) {
+        if (c.status === '复核中') {
+            footerHtml += `<button class="btn btn-purple" onclick="hideModal('detailModal');openSupplementFromHQ('${c.id}')">📎 补充材料</button>`;
+        }
+        if (c.status !== '已作废') {
+            footerHtml += `<button class="btn btn-danger" onclick="hideModal('detailModal');openVoid('${c.id}')">🗑️ 作废</button>`;
+            footerHtml += `<button class="btn btn-success" onclick="hideModal('detailModal');openComplete('${c.id}')">✅ 复核完结</button>`;
+        }
+    } else {
+        if (c.status === '确认中' && !c.hasSupplement) {
+            footerHtml += `<button class="btn btn-success" onclick="hideModal('detailModal');openConfirmNoAppeal('${c.id}')">✅ 确认无申诉</button>`;
+            footerHtml += `<button class="btn btn-warning" onclick="hideModal('detailModal');openAppeal('${c.id}')">📤 提交申诉</button>`;
+        } else if (c.status === '确认中' && c.hasSupplement) {
+            footerHtml += `<button class="btn btn-purple" onclick="hideModal('detailModal');openSupplement('${c.id}')">📎 补充材料</button>`;
+        }
+    }
+
+    const html = `
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal wide">
+            <div class="modal-header">
+                <span class="modal-title">
+                    📋 确认函详情
+                    ${statusBadge(c.status)}
+                    ${c.hasSupplement && c.status === '确认中' ? '<span class="badge badge-purple">📎 待补充</span>' : ''}
+                    ${c.hasSupplement && c.status === '复核中' ? '<span class="badge badge-purple">📎 补充过</span>' : ''}
+                </span>
+                <button class="modal-close" onclick="hideModal('detailModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                ${c.status === '确认中' && c.hasSupplement ? `<div class="alert alert-purple"><span>🔔</span><span>总部已发起补充材料请求，请查看退回说明并补充材料。</span></div>` : ''}
+                <div class="detail-section">
+                    <div class="detail-title">📌 基本信息</div>
+                    <div class="detail-grid">
+                        <div class="detail-item"><div class="label">确认函编号</div><div class="value">${esc(c.id)}</div></div>
+                        <div class="detail-item"><div class="label">销司名称</div><div class="value">${esc(c.company)}</div></div>
+                        <div class="detail-item"><div class="label">所属期间</div><div class="value">${esc(c.period)}</div></div>
+                        <div class="detail-item"><div class="label">条码数量</div><div class="value">${c.barcodeCount}</div></div>
+                        <div class="detail-item"><div class="label">申诉机器数量</div><div class="value" style="color:${c.appealCount > 0 ? 'var(--accent)' : 'var(--gray-800)'};">${c.status === '确认中' && !c.hasSupplement ? '—' : (c.appealCount || 0)}</div></div>
+                        <div class="detail-item"><div class="label">当前状态</div><div class="value" style="color:${statusColor(c.status)};">${c.status}</div></div>
+                    </div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-title">📎 确认函附件（红头文件）</div>
+                    <div class="file-item">
+                        <span class="file-icon">📄</span>
+                        <span class="file-name">${esc(c.attachment)}</span>
+                        <span class="file-size">${c.attachmentSize}</span>
+                        <span class="file-action">👁 预览</span>
+                        <span class="file-action">📥 下载</span>
+                    </div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-title">📦 申诉材料记录</div>
+                    <div class="file-list">${appealFilesHtml}</div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-title">🕐 操作记录</div>
+                    <div class="timeline">${timelineHtml}</div>
+                </div>
+                <div class="detail-section" style="margin-bottom:0;">
+                    <div class="detail-title">📝 内部备注</div>
+                    <div style="background:var(--gray-50);padding:12px 16px;border-radius:8px;font-size:13px;color:var(--gray-700);border:1px solid var(--gray-100);">${esc(c.remark || '暂无内部备注。')}</div>
+                </div>
+            </div>
+            <div class="modal-footer">${footerHtml}</div>
+        </div>
+    </div>`;
+    document.getElementById('modalContainer').insertAdjacentHTML('beforeend', html);
+    showModal('detailModal');
+}
+
+/* ============================================================
+   导出
+   ============================================================ */
+function exportCSV() {
+    const list = getFilteredList();
+    if (list.length === 0) { toast('没有可导出的数据', 'error'); return; }
+
+    const headers = ['确认函编号','销司名称','所属期间','条码数量','申诉机器数量','提交时间','状态','内部备注'];
+    const rows = list.map(c => [
+        c.id, c.company, c.period, c.barcodeCount,
+        (c.status === '确认中' && !c.hasSupplement) ? '' : (c.appealCount || 0),
+        c.createdAt, c.status, c.remark || ''
+    ]);
+    const csv = [headers, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `确认函数据_${now().replace(/[: ]/g,'-')}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('数据已导出', 'success');
+}
+
+/* ============================================================
+   点击遮罩关闭弹窗
+   ============================================================ */
+document.addEventListener('click', function(e) {
+    if (e.target.classList && e.target.classList.contains('modal-overlay')) {
+        e.target.classList.remove('active');
+        document.body.style.overflow = '';
+        // 移除动态创建的弹窗（除预设的）
+        if (!['createModal','completeModal','voidModal','hqSupplementModal','noAppealModal','appealModal','branchSupplementModal','detailModal'].includes(e.target.id)) {
+            e.target.remove();
+        } else {
+            e.target.remove();
+        }
+    }
+});
+
+/* ============================================================
+   初始化
+   ============================================================ */
+loadData();
+render();
+
+console.log('✅ 格力确认函管理系统已加载');
+console.log('📌 功能说明：');
+console.log('  - 顶部可切换【总部端】和【销司端】角色');
+console.log('  - 总部端：新建确认函、查看、完结、作废、发起补充材料');
+console.log('  - 销司端：查看、确认无申诉、提交申诉、补充材料、查看进度');
+console.log('  - 所有操作实时更新状态和操作记录');
+console.log('  - 数据保存在 localStorage，刷新不丢失');
+</script>
+</body>
+</html>
